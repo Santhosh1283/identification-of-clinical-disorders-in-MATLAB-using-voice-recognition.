@@ -1,0 +1,27 @@
+clc;
+close all;
+clear;
+% Import the audio file
+filename = "/MATLAB Drive/audio 2 (1).wav";
+[y, Fs] = audioread(filename);
+F0 = pitch(y, Fs);
+% Normalize the F0 values
+F0 = F0 / max(F0);
+% Threshold
+F0Threshold = 0.4;
+% ADHD analysis
+isADHD = F0 < F0Threshold;
+t = (0:length👍🏻-1) / Fs;
+% Output
+figure;
+subplot(2,1,1);
+plot(t, y);
+xlabel('Time (s)');
+ylabel('Amplitude');
+title('Original Audio');
+subplot(2,1,2);
+plot(t(1:length(isADHD)), isADHD);
+xlabel('Time (s)');
+ylabel('ADHD Detection');
+title('ADHD Detection (1 = ADHD, 0 = non-ADHD)');
+ylim([-0.1 1.1])
