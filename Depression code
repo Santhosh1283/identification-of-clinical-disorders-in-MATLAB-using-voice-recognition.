@@ -1,0 +1,30 @@
+clc;
+close all;
+clear;
+% Import audio file
+filename = "/MATLAB Drive/audio 1 (2).wav";
+[y, Fs] = audioread(filename);
+% Preprocess which reduces noise and other unwanted
+%elements
+%spectralCentroid (algorithm required)
+spectralCentroid = spectralCentroid(y, Fs);
+% normalization
+spectralCentroid = spectralCentroid / max(spectralCentroid);
+%setting threshold value
+centroidThreshold = 0.5;
+% computing detection using algorithm
+isDepressed = spectralCentroid < centroidThreshold;
+t = (0:length(y)-1) / Fs;
+% output
+figure;
+subplot(2,1,1);
+plot(t, y);
+xlabel('Time (s)');
+ylabel('Amplitude');
+title('Original Audio');
+subplot(2,1,2);
+plot(t(1:length(isDepressed)), isDepressed);
+xlabel('Time (s)');
+ylabel('Depression Detection');
+title('Depression Detection (1 = depressed, 0 = non-depressed)');
+ylim([-0.1 1.1]);
