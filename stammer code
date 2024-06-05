@@ -1,0 +1,30 @@
+clc;
+clear all;
+close all;
+%importing audio files
+filename = "/MATLAB Drive/audio 3 (1).wav";
+[y, Fs] = audioread(filename);
+%Segeregation into frames
+frameSize = 0.03; 
+frame = round(frameSize * Fs); 
+energyThreshold = 0.1; 
+%EnergyCalculation
+energy = sum(y.^2, 2);
+%normalization
+energy = energy / max(energy);
+%pause detection (for STUTTERING/STAMMERING)
+isSpeaking = energy > energyThreshold;
+% ouput
+figure;
+t = (0:length(y)-1) / Fs;
+subplot(2,1,1);
+plot(t, y);
+xlabel('Time (s)');
+ylabel('Amplitude');
+title('Original Audio');
+subplot(2,1,2);
+plot(t, isSpeaking);
+xlabel('Time (s)');
+ylabel('Speech Detection');
+title('Stammer Detection (1 = speaking, 0 = pause)');
+ylim([-0.1 1.1]);
